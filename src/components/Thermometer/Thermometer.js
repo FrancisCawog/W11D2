@@ -5,22 +5,23 @@ import {useState, useEffect } from "react"
 
 function Thermometer() {
   const {temperature, setTemp} = useClimate();
-  const [desiredTemp, setDesiredTemp] = useState();
+  const [desiredTemp, setDesiredTemp] = useState(50);
 
   useEffect(() => {
-
-    setTimeout(function(){
-
+    const interval = setInterval(function(){
       if (temperature > desiredTemp){
         setTemp(temperature - 1)
-      } else if (temperature < desiredTemp){
-        setTemp(temperature + 1)
-      } else {
-        clearTimeout()
+      } else if (temperature === desiredTemp) {
+          clearInterval(interval);
+        } else {
+          setTemp(temperature + 1)
+        }
+      } ,1000)
+      
+      return () => {
+        clearInterval(interval);
       }
-
-    }, 1000)
-  }, [temperature])
+    }, [temperature, desiredTemp])
 
   return (
     <section>
